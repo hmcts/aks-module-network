@@ -11,6 +11,8 @@ variable "public_subnet_cidr_blocks" {}
 variable "private_subnet_cidr_blocks" {}
 variable "application_gateway_subnet_cidr_blocks" {}
 variable "deploy_environment" {}
+variable "route_address_prefix" {}
+variable "route_next_hop_in_ip_address" {}
 
 # Tags
 variable "tag_project_name" {}
