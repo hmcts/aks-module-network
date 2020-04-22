@@ -4,12 +4,12 @@
 
 # Subnets
 
-## DMZ (VPN)
+## AKS-00
 
-resource "azurerm_subnet" "dmz_subnet" {
-  address_prefix = var.dmz_subnet_cidr_blocks
+resource "azurerm_subnet" "aks_00_subnet" {
+  address_prefix = var.aks_00_subnet_cidr_blocks
 
-  name = format("%s_dmz_%s",
+  name = format("%s_aks_00_%s",
     lookup(data.null_data_source.network_defaults.inputs, "name_prefix"),
     var.deploy_environment
   )
@@ -18,10 +18,10 @@ resource "azurerm_subnet" "dmz_subnet" {
   virtual_network_name = azurerm_virtual_network.virtual_network.name
 }
 
-## Public
+## AKS-01
 
-resource "azurerm_subnet" "public_subnet" {
-  address_prefix = var.public_subnet_cidr_blocks
+resource "azurerm_subnet" "aks_01_subnet" {
+  address_prefix = var.aks_01_subnet_cidr_blocks
 
   name = format("%s_public_%s",
     lookup(data.null_data_source.network_defaults.inputs, "name_prefix"),
@@ -32,10 +32,10 @@ resource "azurerm_subnet" "public_subnet" {
   virtual_network_name = azurerm_virtual_network.virtual_network.name
 }
 
-## Private
+## Iaas 
 
-resource "azurerm_subnet" "private_subnet" {
-  address_prefix = var.private_subnet_cidr_blocks
+resource "azurerm_subnet" "iaas_subnet" {
+  address_prefix = var.iaas_subnet_cidr_blocks
 
   name = format("%s_private_%s",
     lookup(data.null_data_source.network_defaults.inputs, "name_prefix"),

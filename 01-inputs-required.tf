@@ -6,10 +6,11 @@ variable "network_address_space" {}
 
 variable "dns_suffix" {}
 
-variable "dmz_subnet_cidr_blocks" {}
-variable "public_subnet_cidr_blocks" {}
-variable "private_subnet_cidr_blocks" {}
+variable "aks_00_subnet_cidr_blocks" {}
+variable "aks_01_subnet_cidr_blocks" {}
+variable "iaas_subnet_cidr_blocks" {}
 variable "application_gateway_subnet_cidr_blocks" {}
+
 variable "deploy_environment" {}
 
 # Tags
