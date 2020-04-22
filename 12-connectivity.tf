@@ -23,7 +23,7 @@ resource "azurerm_subnet" "aks_00_subnet" {
 resource "azurerm_subnet" "aks_01_subnet" {
   address_prefix = var.aks_01_subnet_cidr_blocks
 
-  name = format("%s_public_%s",
+  name = format("%s_aks_01_%s",
     lookup(data.null_data_source.network_defaults.inputs, "name_prefix"),
     var.deploy_environment
   )
@@ -37,7 +37,7 @@ resource "azurerm_subnet" "aks_01_subnet" {
 resource "azurerm_subnet" "iaas_subnet" {
   address_prefix = var.iaas_subnet_cidr_blocks
 
-  name = format("%s_private_%s",
+  name = format("%s_iaas_%s",
     lookup(data.null_data_source.network_defaults.inputs, "name_prefix"),
     var.deploy_environment
   )
