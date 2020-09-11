@@ -72,9 +72,9 @@ resource "azurerm_route_table" "route_table" {
   resource_group_name = var.resource_group_name
 
   route {
-    name                   = var.route_name
-    address_prefix         = var.route_address_prefix
-    next_hop_type          = var.route_next_hop_type
-    next_hop_in_ip_address = var.route_next_hop_in_ip_address
+    name                   = "default"
+    address_prefix         = "10.100.0.0/14"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.10.1.1"
   }
 }
