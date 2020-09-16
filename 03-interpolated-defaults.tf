@@ -10,12 +10,12 @@ data "null_data_source" "network_defaults" {
       var.network_shortname
     )
 
-    network_internal_zonename = format("%s.%s.%s.%s",
-      var.network_shortname,
-      local.slug_location,
-      var.tag_environment,
-      var.dns_suffix
-    )
+    # network_internal_zonename = format("%s.%s.%s.%s",
+    #   var.network_shortname,
+    #   local.slug_location,
+    #   var.tag_environment,
+    #   var.dns_suffix
+    # )
   }
 }
 

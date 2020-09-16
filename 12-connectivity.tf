@@ -9,7 +9,7 @@
 resource "azurerm_subnet" "aks_00_subnet" {
   address_prefix = var.aks_00_subnet_cidr_blocks
 
-  name = format("%s_aks_00_%s",
+  name = format("%s_00_%s",
     lookup(data.null_data_source.network_defaults.inputs, "name_prefix"),
     var.deploy_environment
   )
@@ -23,7 +23,7 @@ resource "azurerm_subnet" "aks_00_subnet" {
 resource "azurerm_subnet" "aks_01_subnet" {
   address_prefix = var.aks_01_subnet_cidr_blocks
 
-  name = format("%s_aks_01_%s",
+  name = format("%s_01_%s",
     lookup(data.null_data_source.network_defaults.inputs, "name_prefix"),
     var.deploy_environment
   )
