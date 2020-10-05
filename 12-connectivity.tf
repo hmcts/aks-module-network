@@ -58,7 +58,7 @@ resource "azurerm_subnet" "application_gateway_subnet" {
 
 resource "azurerm_route_table" "route_table" {
   name = format("%s-%s-route-table",
-    var.service_name_prefix
+    var.service_name_prefix,
     var.deploy_environment
   )
 
