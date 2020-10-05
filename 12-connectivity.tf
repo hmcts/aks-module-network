@@ -9,9 +9,8 @@
 resource "azurerm_subnet" "aks_00_subnet" {
   address_prefix = var.aks_00_subnet_cidr_blocks
 
-  name = format("%s_00_%s",
-    lookup(data.null_data_source.network_defaults.inputs, "name_prefix"),
-    var.deploy_environment
+  name = format("%s-00",
+    lookup(data.null_data_source.network_defaults.inputs, "name_prefix")
   )
 
   resource_group_name  = var.resource_group_name
@@ -23,9 +22,8 @@ resource "azurerm_subnet" "aks_00_subnet" {
 resource "azurerm_subnet" "aks_01_subnet" {
   address_prefix = var.aks_01_subnet_cidr_blocks
 
-  name = format("%s_01_%s",
-    lookup(data.null_data_source.network_defaults.inputs, "name_prefix"),
-    var.deploy_environment
+  name = format("%s-01",
+    lookup(data.null_data_source.network_defaults.inputs, "name_prefix")
   )
 
   resource_group_name  = var.resource_group_name
@@ -37,10 +35,7 @@ resource "azurerm_subnet" "aks_01_subnet" {
 resource "azurerm_subnet" "iaas_subnet" {
   address_prefix = var.iaas_subnet_cidr_blocks
 
-  name = format("%s_iaas_%s",
-    lookup(data.null_data_source.network_defaults.inputs, "name_prefix"),
-    var.deploy_environment
-  )
+  name = "iaas"
 
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.virtual_network.name
@@ -51,9 +46,8 @@ resource "azurerm_subnet" "iaas_subnet" {
 resource "azurerm_subnet" "application_gateway_subnet" {
   address_prefix = var.application_gateway_subnet_cidr_blocks
 
-  name = format("%s_application_gateway_%s",
-    lookup(data.null_data_source.network_defaults.inputs, "name_prefix"),
-    var.deploy_environment
+  name = format("%s-appgw",
+    lookup(data.null_data_source.network_defaults.inputs, "name_prefix")
   )
 
   resource_group_name  = var.resource_group_name
@@ -63,7 +57,7 @@ resource "azurerm_subnet" "application_gateway_subnet" {
 # Route Table
 
 resource "azurerm_route_table" "route_table" {
-  name = format("%s_route_table_%s",
+  name = format("%s-%s-route-table",
     lookup(data.null_data_source.network_defaults.inputs, "name_prefix"),
     var.deploy_environment
   )
