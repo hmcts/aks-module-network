@@ -15,7 +15,7 @@ data "null_data_source" "debug_outputs" {
     enable_debug = var.enable_debug
 
     # interpolated-defaults
-    name_prefix = lookup(data.null_data_source.network_defaults.inputs, "name_prefix")
+    name_prefix =  var.service_name_prefix
   }
 }
 

@@ -10,7 +10,7 @@ resource "azurerm_virtual_network" "virtual_network" {
   location = var.network_location
 
   name = format("%s-%s-vnet",
-    lookup(data.null_data_source.network_defaults.inputs, "name_prefix"),
+    var.service_name_prefix,
     lookup(data.null_data_source.tag_defaults.inputs, "Environment")
   )
 
@@ -20,7 +20,7 @@ resource "azurerm_virtual_network" "virtual_network" {
     data.null_data_source.tag_defaults.inputs,
     map(
       "Name", format("%s-%s-vnet",
-        lookup(data.null_data_source.network_defaults.inputs, "name_prefix"),
+        var.service_name_prefix,
         lookup(data.null_data_source.tag_defaults.inputs, "Environment")
       )
     )
