@@ -10,7 +10,7 @@ resource "azurerm_subnet" "aks_00_subnet" {
   address_prefix = var.aks_00_subnet_cidr_blocks
 
   name = format("%s-00",
-    var.service_name_prefix
+    var.service_shortname
   )
 
   resource_group_name  = var.resource_group_name
@@ -23,7 +23,7 @@ resource "azurerm_subnet" "aks_01_subnet" {
   address_prefix = var.aks_01_subnet_cidr_blocks
 
   name = format("%s-01",
-    var.service_name_prefix
+    var.service_shortname
   )
 
   resource_group_name  = var.resource_group_name
@@ -47,7 +47,7 @@ resource "azurerm_subnet" "application_gateway_subnet" {
   address_prefix = var.application_gateway_subnet_cidr_blocks
 
   name = format("%s-appgw",
-    var.service_name_prefix
+    var.service_shortname
   )
 
   resource_group_name  = var.resource_group_name
@@ -58,7 +58,7 @@ resource "azurerm_subnet" "application_gateway_subnet" {
 
 resource "azurerm_route_table" "route_table" {
   name = format("%s-%s-route-table",
-    var.service_name_prefix,
+    var.service_shortname,
     var.deploy_environment
   )
 
