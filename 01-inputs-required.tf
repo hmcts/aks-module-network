@@ -3,8 +3,8 @@ variable "resource_group_name" {}
 variable "network_location" {}
 variable "network_shortname" {}
 variable "network_address_space" {}
-
-variable "dns_suffix" {}
+variable "service_name_prefix" {}
+variable "service_shortname" {}
 
 variable "aks_00_subnet_cidr_blocks" {}
 variable "aks_01_subnet_cidr_blocks" {}

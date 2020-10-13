@@ -4,21 +4,6 @@ locals {
   slug_location = lower(replace(var.network_location, " ", "."))
 }
 
-data "null_data_source" "network_defaults" {
-  inputs = {
-    name_prefix = format("%s",
-      var.network_shortname
-    )
-
-    network_internal_zonename = format("%s.%s.%s.%s",
-      var.network_shortname,
-      local.slug_location,
-      var.tag_environment,
-      var.dns_suffix
-    )
-  }
-}
-
 data "null_data_source" "tag_defaults" {
   inputs = {
     Project_Name         = var.tag_project_name
