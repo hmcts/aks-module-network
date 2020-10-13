@@ -5,7 +5,6 @@ variable "network_shortname" {}
 variable "network_address_space" {}
 variable "service_name_prefix" {}
 variable "service_shortname" {}
-# variable "dns_suffix" {}
 
 variable "aks_00_subnet_cidr_blocks" {}
 variable "aks_01_subnet_cidr_blocks" {}
