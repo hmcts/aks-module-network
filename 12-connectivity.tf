@@ -72,3 +72,13 @@ resource "azurerm_route_table" "route_table" {
     next_hop_in_ip_address = var.route_next_hop_in_ip_address
   }
 }
+
+resource "azurerm_subnet_route_table_association" "aks_00" {
+  route_table_id = azurerm_route_table.route_table.id
+  subnet_id = azurerm_subnet.aks_00_subnet.id
+}
+
+resource "azurerm_subnet_route_table_association" "aks_01" {
+  route_table_id = azurerm_route_table.route_table.id
+  subnet_id = azurerm_subnet.aks_01_subnet.id
+}
