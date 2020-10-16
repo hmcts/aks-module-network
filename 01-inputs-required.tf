@@ -13,5 +13,5 @@ variable "project" {}
 variable "service_shortname" {}
 
 # Tags
-variable "tag" {}
+variable "tags" {}
 
