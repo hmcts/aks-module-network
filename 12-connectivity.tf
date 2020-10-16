@@ -7,7 +7,7 @@
 ## AKS-00
 
 resource "azurerm_subnet" "aks_00_subnet" {
-  address_prefix = var.aks_00_subnet_cidr_blocks
+  address_prefixes = [var.aks_00_subnet_cidr_blocks]
 
   name = format("%s-00",
     var.service_shortname
@@ -20,7 +20,7 @@ resource "azurerm_subnet" "aks_00_subnet" {
 ## AKS-01
 
 resource "azurerm_subnet" "aks_01_subnet" {
-  address_prefix = var.aks_01_subnet_cidr_blocks
+  address_prefixes = [var.aks_01_subnet_cidr_blocks]
 
   name = format("%s-01",
     var.service_shortname
@@ -33,7 +33,7 @@ resource "azurerm_subnet" "aks_01_subnet" {
 ## Iaas 
 
 resource "azurerm_subnet" "iaas_subnet" {
-  address_prefix = var.iaas_subnet_cidr_blocks
+  address_prefixes = [var.iaas_subnet_cidr_blocks]
 
   name = "iaas"
 
@@ -44,7 +44,7 @@ resource "azurerm_subnet" "iaas_subnet" {
 ## Application Gateway
 
 resource "azurerm_subnet" "application_gateway_subnet" {
-  address_prefix = var.application_gateway_subnet_cidr_blocks
+  address_prefixes = [var.application_gateway_subnet_cidr_blocks]
 
   name = format("%s-appgw",
     var.service_shortname
@@ -59,7 +59,7 @@ resource "azurerm_subnet" "application_gateway_subnet" {
 resource "azurerm_route_table" "route_table" {
   name = format("%s-%s-route-table",
     var.service_shortname,
-    var.deploy_environment
+    var.environment
   )
 
   location            = var.network_location
@@ -71,4 +71,14 @@ resource "azurerm_route_table" "route_table" {
     next_hop_type          = var.route_next_hop_type
     next_hop_in_ip_address = var.route_next_hop_in_ip_address
   }
+}
+
+resource "azurerm_subnet_route_table_association" "aks_00" {
+  route_table_id = azurerm_route_table.route_table.id
+  subnet_id = azurerm_subnet.aks_00_subnet.id
+}
+
+resource "azurerm_subnet_route_table_association" "aks_01" {
+  route_table_id = azurerm_route_table.route_table.id
+  subnet_id = azurerm_subnet.aks_01_subnet.id
 }
