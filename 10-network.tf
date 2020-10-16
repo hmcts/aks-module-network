@@ -10,19 +10,11 @@ resource "azurerm_virtual_network" "virtual_network" {
   location = var.network_location
 
   name = format("%s-%s-vnet",
-    var.service_name_prefix,
-    lookup(data.null_data_source.tag_defaults.inputs, "Environment")
+    var.project,
+    var.environment
   )
 
   resource_group_name = var.resource_group_name
 
-  tags = merge(
-    data.null_data_source.tag_defaults.inputs,
-    map(
-      "Name", format("%s-%s-vnet",
-        var.service_name_prefix,
-        lookup(data.null_data_source.tag_defaults.inputs, "Environment")
-      )
-    )
-  )
+  tags = var.tags
 }
