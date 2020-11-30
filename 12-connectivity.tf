@@ -37,8 +37,10 @@ resource "azurerm_subnet" "iaas_subnet" {
 
   name = "iaas"
 
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.virtual_network.name
+  resource_group_name                            = var.resource_group_name
+  virtual_network_name                           = azurerm_virtual_network.virtual_network.name
+  service_endpoints                              = var.iaas_subnet_service_endpoints
+  enforce_private_link_endpoint_network_policies = var.iaas_subnet_enforce_private_link_endpoint_network_policies
 }
 
 ## Application Gateway
