@@ -7,6 +7,8 @@ variable "aks_00_subnet_cidr_blocks" {}
 variable "aks_01_subnet_cidr_blocks" {}
 variable "iaas_subnet_cidr_blocks" {}
 variable "application_gateway_subnet_cidr_blocks" {}
+variable "iaas_subnet_service_endpoints" {}
+variable "iaas_subnet_enforce_private_link_network_policies" {}
 
 variable "environment" {}
 variable "project" {}
