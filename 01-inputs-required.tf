@@ -14,7 +14,9 @@ variable "iaas_subnet_service_endpoints" {
         "Microsoft.Sql"
     ]
 }
-variable "iaas_subnet_enforce_private_link_endpoint_network_policies" {}
+variable "iaas_subnet_enforce_private_link_endpoint_network_policies" {
+    default = true
+}
 
 variable "environment" {}
 variable "project" {}
