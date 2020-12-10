@@ -15,6 +15,7 @@ resource "azurerm_subnet" "aks_00_subnet" {
 
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.virtual_network.name
+  service_endpoints    = var.subnet_service_endpoints
 }
 
 ## AKS-01
@@ -28,6 +29,8 @@ resource "azurerm_subnet" "aks_01_subnet" {
 
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.virtual_network.name
+  service_endpoints    = var.subnet_service_endpoints
+
 }
 
 ## Iaas 
@@ -39,7 +42,7 @@ resource "azurerm_subnet" "iaas_subnet" {
 
   resource_group_name                            = var.resource_group_name
   virtual_network_name                           = azurerm_virtual_network.virtual_network.name
-  service_endpoints                              = var.iaas_subnet_service_endpoints
+  service_endpoints                              = var.subnet_service_endpoints
   enforce_private_link_endpoint_network_policies = var.iaas_subnet_enforce_private_link_endpoint_network_policies
 }
 
