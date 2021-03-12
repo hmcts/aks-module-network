@@ -88,7 +88,7 @@ resource "azurerm_route" "additional_route" {
   resource_group_name    = var.resource_group_name
   address_prefix         = each.value.address_prefix
   next_hop_type          = each.value.next_hop_type
-  next_hop_in_ip_address = each.value.next_hop_in_ip_address
+  next_hop_in_ip_address = each.value.next_hop_type != "VirtualAppliance" ? null : each.value.next_hop_in_ip_address
 }
 
 resource "azurerm_subnet_route_table_association" "aks_00" {
