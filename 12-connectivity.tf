@@ -59,6 +59,19 @@ resource "azurerm_subnet" "application_gateway_subnet" {
   virtual_network_name = azurerm_virtual_network.virtual_network.name
 }
 
+## VH Wowza
+
+resource "azurerm_subnet" "vh_private_endpoints" {
+  address_prefixes = [var.vh_private_endpoint_subnet_cidr_blocks]
+
+  name = format("vh_private_endpoints",
+    var.service_shortname
+  )
+
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.virtual_network.name
+}
+
 # Route Table
 
 resource "azurerm_route_table" "route_table" {
