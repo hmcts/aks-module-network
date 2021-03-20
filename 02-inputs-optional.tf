@@ -30,6 +30,6 @@ variable "additional_subnets" {
     name                   = string
     address_prefix         = string
   }))
-  
+
     default = []
 }
