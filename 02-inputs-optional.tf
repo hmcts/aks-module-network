@@ -22,11 +22,14 @@ variable "additional_routes" {
     next_hop_in_ip_address = string
   }))
 
+  default = []
+}
+
 variable "additional_subnets" {
   type = list(object({
     name                   = string
     address_prefix         = string
   }))
-
-  default = []
+  
+    default = []
 }
