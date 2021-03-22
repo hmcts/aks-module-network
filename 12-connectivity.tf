@@ -62,7 +62,7 @@ resource "azurerm_subnet" "application_gateway_subnet" {
 ## VH Additional Subnets
 
 resource "azurerm_subnet" "additional_subnets" {
-  for_each = { for subnet in var.additional_subnets : subnet.name => subnet }
+  for_each = var.additional_subnets
 
   name                 = each.value.name
   address_prefixes     = each.value.address_prefix
