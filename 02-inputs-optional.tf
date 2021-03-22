@@ -24,3 +24,12 @@ variable "additional_routes" {
 
   default = []
 }
+
+variable "additional_subnets" {
+  type = list(object({
+    name                   = string
+    address_prefix         = string
+  }))
+
+    default = []
+}
