@@ -65,7 +65,7 @@ resource "azurerm_subnet" "additional_subnets" {
   for_each = { for subnet in var.additional_subnets : subnet.name => subnet }
 
   name                 = each.value.name
-  address_prefixes     = each.value.address_prefix
+  address_prefixes     = [each.value.address_prefix]
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.virtual_network.name
 }
