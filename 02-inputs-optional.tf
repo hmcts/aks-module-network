@@ -27,9 +27,9 @@ variable "additional_routes" {
 
 variable "additional_subnets" {
   type = list(object({
-    name                   = string
-    address_prefix         = string
+    name                                         = string
+    address_prefix                               = string
   }))
 
-    default = []
+  default = []
 }
