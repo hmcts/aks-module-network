@@ -29,7 +29,6 @@ variable "additional_subnets" {
   type = list(object({
     name                                         = string
     address_prefix                               = string
-    additional_subnets_priv_link_endpoint_policy = bool
   }))
 
   default = []
