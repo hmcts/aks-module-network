@@ -64,10 +64,10 @@ resource "azurerm_subnet" "application_gateway_subnet" {
 resource "azurerm_subnet" "additional_subnets" {
   for_each = { for subnet in var.additional_subnets : subnet.name => subnet }
 
-  name                 = each.value.name
-  address_prefixes     = [each.value.address_prefix]
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.virtual_network.name
+  name                                           = each.value.name
+  address_prefixes                               = [each.value.address_prefix]
+  resource_group_name                            = var.resource_group_name
+  virtual_network_name                           = azurerm_virtual_network.virtual_network.name
   enforce_private_link_endpoint_network_policies = true
 }
 
@@ -105,10 +105,10 @@ resource "azurerm_route" "additional_route" {
 
 resource "azurerm_subnet_route_table_association" "aks_00" {
   route_table_id = azurerm_route_table.route_table.id
-  subnet_id = azurerm_subnet.aks_00_subnet.id
+  subnet_id      = azurerm_subnet.aks_00_subnet.id
 }
 
 resource "azurerm_subnet_route_table_association" "aks_01" {
   route_table_id = azurerm_route_table.route_table.id
-  subnet_id = azurerm_subnet.aks_01_subnet.id
+  subnet_id      = azurerm_subnet.aks_01_subnet.id
 }
