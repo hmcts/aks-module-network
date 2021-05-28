@@ -121,22 +121,18 @@ resource "azurerm_route_table" "route_table_appgw" {
 
   location            = var.network_location
   resource_group_name = var.resource_group_name
-
-  count = var.appgw_routetable ? 1 : 0
 }
 
 resource "azurerm_subnet_route_table_association" "application_gateway_subnet" {
-  route_table_id = azurerm_route_table.route_table_appgw[count.index].id
+  route_table_id = azurerm_route_table.route_table_appgw.id
   subnet_id      = azurerm_subnet.application_gateway_subnet.id
-
-  count = var.appgw_routetable ? 1 : 0
 }
 
 resource "azurerm_route" "additional_route_appgw" {
   for_each = { for route in var.additional_routes_appgw : route.name => route }
 
   name                   = lower(each.value.name)
-  route_table_name       = azurerm_route_table.route_table_appgw[count.index].name
+  route_table_name       = azurerm_route_table.route_table_appgw.name
   resource_group_name    = var.resource_group_name
   address_prefix         = each.value.address_prefix
   next_hop_type          = each.value.next_hop_type
