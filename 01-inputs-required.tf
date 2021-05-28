@@ -26,3 +26,4 @@ variable "service_shortname" {}
 # Tags
 variable "tags" {}
 
+variable "appgw_routetable" {}

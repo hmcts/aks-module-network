@@ -121,11 +121,15 @@ resource "azurerm_route_table" "route_table_appgw" {
 
   location            = var.network_location
   resource_group_name = var.resource_group_name
+
+  count = var.appgw_routetable ? 1 : 0
 }
 
 resource "azurerm_subnet_route_table_association" "application_gateway_subnet" {
   route_table_id = azurerm_route_table.route_table_appgw.id
   subnet_id      = azurerm_subnet.application_gateway_subnet.id
+
+  count = var.appgw_routetable ? 1 : 0
 }
 
 resource "azurerm_route" "additional_route_appgw" {
@@ -137,4 +141,6 @@ resource "azurerm_route" "additional_route_appgw" {
   address_prefix         = each.value.address_prefix
   next_hop_type          = each.value.next_hop_type
   next_hop_in_ip_address = each.value.next_hop_type != "VirtualAppliance" ? null : each.value.next_hop_in_ip_address
+
+  count = var.appgw_routetable ? 1 : 0
 }
