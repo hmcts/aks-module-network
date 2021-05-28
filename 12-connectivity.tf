@@ -133,6 +133,7 @@ resource "azurerm_subnet_route_table_association" "application_gateway_subnet" {
 }
 
 resource "azurerm_route" "additional_route_appgw" {
+  count = var.appgw_routetable ? 1 : 0
   for_each = { for route in var.additional_routes_appgw : route.name => route }
 
   name                   = lower(each.value.name)
@@ -142,5 +143,4 @@ resource "azurerm_route" "additional_route_appgw" {
   next_hop_type          = each.value.next_hop_type
   next_hop_in_ip_address = each.value.next_hop_type != "VirtualAppliance" ? null : each.value.next_hop_in_ip_address
 
-  count = var.appgw_routetable ? 1 : 0
 }
