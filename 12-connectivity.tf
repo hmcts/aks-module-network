@@ -68,7 +68,7 @@ resource "azurerm_subnet" "subnets" {
   address_prefixes                               = [each.value.address_prefix]
   resource_group_name                            = var.resource_group_name
   virtual_network_name                           = azurerm_virtual_network.virtual_network.name
-  enforce_private_link_endpoint_network_policies = each.value.enforce_private_link_endpoint_network_policies == null ? [] : true
+  enforce_private_link_endpoint_network_policies = each.value.enforce_private_link_endpoint_network_policies == null ? [] : var.iaas_subnet_enforce_private_link_endpoint_network_policies
   service_endpoints                              = each.value.subnet_service_endpoints == null ? [] : var.subnet_service_endpoints
 }
 
@@ -112,6 +112,16 @@ resource "azurerm_subnet_route_table_association" "aks_00" {
 resource "azurerm_subnet_route_table_association" "aks_01" {
   route_table_id = azurerm_route_table.route_table.id
   subnet_id      = azurerm_subnet.aks_01_subnet.id
+}
+
+resource "azurerm_subnet_route_table_association" "route_table" {
+  for_each = { for subnet in var.subnets : subnet.name => subnet
+    if subnet.route_table == true
+  }
+
+  route_table_id = azurerm_route_table.route_table.id
+  subnet_id      = azurerm_subnet.subnets[each.value.name].id
+
 }
 
 resource "azurerm_route_table" "route_table_appgw" {
