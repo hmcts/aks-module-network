@@ -6,69 +6,70 @@
 
 ## AKS-00
 
-resource "azurerm_subnet" "aks_00_subnet" {
-  address_prefixes = [var.aks_00_subnet_cidr_blocks]
+# resource "azurerm_subnet" "aks_00_subnet" {
+#   address_prefixes = [var.aks_00_subnet_cidr_blocks]
 
-  name = format("%s-00",
-    var.service_shortname
-  )
+#   name = format("%s-00",
+#     var.service_shortname
+#   )
 
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.virtual_network.name
-  service_endpoints    = var.subnet_service_endpoints
-}
+#   resource_group_name  = var.resource_group_name
+#   virtual_network_name = azurerm_virtual_network.virtual_network.name
+#   service_endpoints    = var.subnet_service_endpoints
+# }
 
-## AKS-01
+# ## AKS-01
 
-resource "azurerm_subnet" "aks_01_subnet" {
-  address_prefixes = [var.aks_01_subnet_cidr_blocks]
+# resource "azurerm_subnet" "aks_01_subnet" {
+#   address_prefixes = [var.aks_01_subnet_cidr_blocks]
 
-  name = format("%s-01",
-    var.service_shortname
-  )
+#   name = format("%s-01",
+#     var.service_shortname
+#   )
 
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.virtual_network.name
-  service_endpoints    = var.subnet_service_endpoints
+#   resource_group_name  = var.resource_group_name
+#   virtual_network_name = azurerm_virtual_network.virtual_network.name
+#   service_endpoints    = var.subnet_service_endpoints
 
-}
+# }
 
-## Iaas 
+# ## Iaas 
 
-resource "azurerm_subnet" "iaas_subnet" {
-  address_prefixes = [var.iaas_subnet_cidr_blocks]
+# resource "azurerm_subnet" "iaas_subnet" {
+#   address_prefixes = [var.iaas_subnet_cidr_blocks]
 
-  name = "iaas"
+#   name = "iaas"
 
-  resource_group_name                            = var.resource_group_name
-  virtual_network_name                           = azurerm_virtual_network.virtual_network.name
-  service_endpoints                              = var.subnet_service_endpoints
-  enforce_private_link_endpoint_network_policies = var.iaas_subnet_enforce_private_link_endpoint_network_policies
-}
+#   resource_group_name                            = var.resource_group_name
+#   virtual_network_name                           = azurerm_virtual_network.virtual_network.name
+#   service_endpoints                              = var.subnet_service_endpoints
+#   enforce_private_link_endpoint_network_policies = var.iaas_subnet_enforce_private_link_endpoint_network_policies
+# }
 
 ## Application Gateway
 
-resource "azurerm_subnet" "application_gateway_subnet" {
-  address_prefixes = [var.application_gateway_subnet_cidr_blocks]
+# resource "azurerm_subnet" "application_gateway_subnet" {
+#   address_prefixes = [var.application_gateway_subnet_cidr_blocks]
 
-  name = format("%s-appgw",
-    var.service_shortname
-  )
+#   name = format("%s-appgw",
+#     var.service_shortname
+#   )
 
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.virtual_network.name
-}
+#   resource_group_name  = var.resource_group_name
+#   virtual_network_name = azurerm_virtual_network.virtual_network.name
+# }
 
 ## VH Additional Subnets
 
-resource "azurerm_subnet" "additional_subnets" {
-  for_each = { for subnet in var.additional_subnets : subnet.name => subnet }
+resource "azurerm_subnet" "subnets" {
+  for_each = { for subnet in var.subnets : subnet.name => subnet }
 
   name                                           = each.value.name
   address_prefixes                               = [each.value.address_prefix]
   resource_group_name                            = var.resource_group_name
   virtual_network_name                           = azurerm_virtual_network.virtual_network.name
-  enforce_private_link_endpoint_network_policies = true
+  enforce_private_link_endpoint_network_policies = each.value.enforce_private_link_endpoint_network_policies == true ? true : []
+  service_endpoints                              = each.value.subnet_service_endpoints == true ? var.subnet_service_endpoints : []
 }
 
 # Route Table
