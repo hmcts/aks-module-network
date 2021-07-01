@@ -19,9 +19,9 @@ variable "subnets" {
   type = list(object({
     name                                           = string
     address_prefix                                 = string
-    subnet_service_endpoints                       = bool
-    enforce_private_link_endpoint_network_policies = bool
-    route_table                                    = bool
+    subnet_service_endpoints                       = optional(bool)
+    enforce_private_link_endpoint_network_policies = optional(bool)
+    route_table                                    = optional(bool)
   }))
 }
 
