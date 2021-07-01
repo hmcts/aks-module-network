@@ -104,15 +104,15 @@ resource "azurerm_route" "additional_route" {
   next_hop_in_ip_address = each.value.next_hop_type != "VirtualAppliance" ? null : each.value.next_hop_in_ip_address
 }
 
-resource "azurerm_subnet_route_table_association" "aks_00" {
-  route_table_id = azurerm_route_table.route_table.id
-  subnet_id      = azurerm_subnet.aks_00_subnet.id
-}
+# resource "azurerm_subnet_route_table_association" "aks_00" {
+#   route_table_id = azurerm_route_table.route_table.id
+#   subnet_id      = azurerm_subnet.aks_00_subnet.id
+# }
 
-resource "azurerm_subnet_route_table_association" "aks_01" {
-  route_table_id = azurerm_route_table.route_table.id
-  subnet_id      = azurerm_subnet.aks_01_subnet.id
-}
+# resource "azurerm_subnet_route_table_association" "aks_01" {
+#   route_table_id = azurerm_route_table.route_table.id
+#   subnet_id      = azurerm_subnet.aks_01_subnet.id
+# }
 
 resource "azurerm_subnet_route_table_association" "route_table" {
   for_each = { for subnet in var.subnets : subnet.name => subnet
@@ -134,19 +134,19 @@ resource "azurerm_route_table" "route_table_appgw" {
   resource_group_name = var.resource_group_name
 }
 
-resource "azurerm_subnet_route_table_association" "application_gateway_subnet" {
-  route_table_id = azurerm_route_table.route_table_appgw.id
-  subnet_id      = azurerm_subnet.application_gateway_subnet.id
-}
+# resource "azurerm_subnet_route_table_association" "application_gateway_subnet" {
+#   route_table_id = azurerm_route_table.route_table_appgw.id
+#   subnet_id      = azurerm_subnet.application_gateway_subnet.id
+# }
 
-resource "azurerm_route" "additional_route_appgw" {
-  for_each = { for route in var.additional_routes_appgw : route.name => route }
+# resource "azurerm_route" "additional_route_appgw" {
+#   for_each = { for route in var.additional_routes_appgw : route.name => route }
 
-  name                   = lower(each.value.name)
-  route_table_name       = azurerm_route_table.route_table_appgw.name
-  resource_group_name    = var.resource_group_name
-  address_prefix         = each.value.address_prefix
-  next_hop_type          = each.value.next_hop_type
-  next_hop_in_ip_address = each.value.next_hop_type != "VirtualAppliance" ? null : each.value.next_hop_in_ip_address
+#   name                   = lower(each.value.name)
+#   route_table_name       = azurerm_route_table.route_table_appgw.name
+#   resource_group_name    = var.resource_group_name
+#   address_prefix         = each.value.address_prefix
+#   next_hop_type          = each.value.next_hop_type
+#   next_hop_in_ip_address = each.value.next_hop_type != "VirtualAppliance" ? null : each.value.next_hop_in_ip_address
 
-}
+# }
