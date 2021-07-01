@@ -68,8 +68,8 @@ resource "azurerm_subnet" "subnets" {
   address_prefixes                               = [each.value.address_prefix]
   resource_group_name                            = var.resource_group_name
   virtual_network_name                           = azurerm_virtual_network.virtual_network.name
-  enforce_private_link_endpoint_network_policies = each.value.enforce_private_link_endpoint_network_policies == true ? true : []
-  service_endpoints                              = each.value.subnet_service_endpoints == true ? var.subnet_service_endpoints : []
+  enforce_private_link_endpoint_network_policies = each.value.enforce_private_link_endpoint_network_policies == null ? [] : true
+  service_endpoints                              = each.value.subnet_service_endpoints == null ? [] : var.subnet_service_endpoints
 }
 
 # Route Table
