@@ -23,8 +23,6 @@ variable "subnets" {
     enforce_private_link_endpoint_network_policies = bool
     route_table                                    = bool
   }))
-
-  default = []
 }
 
 variable "environment" {}
