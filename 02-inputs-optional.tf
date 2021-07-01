@@ -13,18 +13,6 @@ variable "route_next_hop_type" {
 variable "route_next_hop_in_ip_address" {
   default = "10.10.1.1"
 }
-
-variable "additional_routes" {
-  type = list(object({
-    name                   = string
-    address_prefix         = string
-    next_hop_type          = string
-    next_hop_in_ip_address = string
-  }))
-
-  default = []
-}
-
 variable "additional_subnets" {
   type = list(object({
     name                                         = string
