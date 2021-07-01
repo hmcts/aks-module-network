@@ -15,6 +15,18 @@ variable "iaas_subnet_enforce_private_link_endpoint_network_policies" {
   default = true
 }
 
+variable "subnets" {
+  type = list(object({
+    name                                           = string
+    address_prefix                                 = string
+    subnet_service_endpoints                       = bool
+    enforce_private_link_endpoint_network_policies = bool
+    route_table                                    = bool
+  }))
+
+  default = []
+}
+
 variable "environment" {}
 variable "project" {}
 variable "service_shortname" {}

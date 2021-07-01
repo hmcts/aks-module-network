@@ -25,18 +25,6 @@ variable "additional_routes" {
   default = []
 }
 
-variable "subnets" {
-  type = list(object({
-    name                                           = string
-    address_prefix                                 = string
-    subnet_service_endpoints                       = bool
-    enforce_private_link_endpoint_network_policies = bool
-    route_table                                    = bool
-  }))
-
-  default = []
-}
-
 variable "additional_routes_appgw" {
   type = list(object({
     name                   = string
