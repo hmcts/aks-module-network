@@ -33,7 +33,7 @@ resource "azurerm_subnet" "aks_01_subnet" {
 
 }
 
-## Iaas 
+## Iaas
 
 resource "azurerm_subnet" "iaas_subnet" {
   address_prefixes = [var.iaas_subnet_cidr_blocks]
@@ -111,4 +111,9 @@ resource "azurerm_subnet_route_table_association" "aks_00" {
 resource "azurerm_subnet_route_table_association" "aks_01" {
   route_table_id = azurerm_route_table.route_table.id
   subnet_id      = azurerm_subnet.aks_01_subnet.id
+}
+
+resource "azurerm_subnet_route_table_association" "iaas" {
+  route_table_id = azurerm_route_table.route_table.id
+  subnet_id      = azurerm_subnet.iaas_subnet.id
 }
