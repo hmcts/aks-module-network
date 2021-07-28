@@ -81,7 +81,7 @@ resource "azurerm_route_table" "route_table" {
 
   location            = var.network_location
   resource_group_name = var.resource_group_name
-  tags = var.tags
+  tags                = var.tags
 }
 
 resource "azurerm_route" "default_route" {
