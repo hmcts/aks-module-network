@@ -112,7 +112,12 @@ resource "azurerm_subnet_route_table_association" "aks_01" {
   route_table_id = azurerm_route_table.route_table.id
   subnet_id      = azurerm_subnet.aks_01_subnet.id
 }
-
+  
+resource "azurerm_subnet_route_table_association" "iaas" {
+  route_table_id = azurerm_route_table.route_table.id
+  subnet_id      = azurerm_subnet.iaas_subnet.id
+}
+  
 resource "azurerm_route_table" "route_table_appgw" {
   name = format("%s-%s-appgw-route-table",
     var.service_shortname,
