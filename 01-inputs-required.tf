@@ -7,7 +7,9 @@ variable "aks_00_subnet_cidr_blocks" {}
 variable "aks_01_subnet_cidr_blocks" {}
 variable "iaas_subnet_cidr_blocks" {}
 variable "application_gateway_subnet_cidr_blocks" {}
-variable "application_gateway_routes" {}
+variable "application_gateway_routes" {
+  default = []
+}
 variable "subnet_service_endpoints" {
   default = [
     "Microsoft.Storage",
