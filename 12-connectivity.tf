@@ -116,11 +116,11 @@ resource "azurerm_route" "additional_route" {
   next_hop_in_ip_address = each.value.next_hop_type != "VirtualAppliance" ? null : each.value.next_hop_in_ip_address
 }
 
-resource "azurerm_route" "route_appgw" {
+resource "azurerm_route" "appgw" {
   for_each = { for route in var.application_gateway_routes : route.name => route }
 
   name                   = lower(each.value.name)
-  route_table_name       = azurerm_route_table.appgw.name
+  route_table_name       = azurerm_route_table.appgw[0].name
   resource_group_name    = var.resource_group_name
   address_prefix         = each.value.address_prefix
   next_hop_type          = each.value.next_hop_type
@@ -145,6 +145,6 @@ resource "azurerm_subnet_route_table_association" "iaas" {
 
 resource "azurerm_subnet_route_table_association" "appgw" {
   count = var.application_gateway_routes == [] ? 0 : 1
-  route_table_id = azurerm_route_table.appgw.id
+  route_table_id = azurerm_route_table.appgw[0].id
   subnet_id      = azurerm_subnet.application_gateway_subnet.id
 }
