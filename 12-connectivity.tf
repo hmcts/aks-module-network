@@ -120,7 +120,7 @@ resource "azurerm_route" "route_appgw" {
   for_each = { for route in var.application_gateway_routes : route.name => route }
 
   name                   = lower(each.value.name)
-  route_table_name       = azurerm_route_table.route_table_appgw.name
+  route_table_name       = azurerm_route_table.appgw.name
   resource_group_name    = var.resource_group_name
   address_prefix         = each.value.address_prefix
   next_hop_type          = each.value.next_hop_type
@@ -145,6 +145,6 @@ resource "azurerm_subnet_route_table_association" "iaas" {
 
 resource "azurerm_subnet_route_table_association" "appgw" {
   count = var.application_gateway_routes == [] ? 0 : 1
-  route_table_id = azurerm_route_table.route_table_appgw.id
+  route_table_id = azurerm_route_table.appgw.id
   subnet_id      = azurerm_subnet.application_gateway_subnet.id
 }
