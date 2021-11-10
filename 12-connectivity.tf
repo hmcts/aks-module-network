@@ -33,7 +33,7 @@ resource "azurerm_subnet" "aks_01_subnet" {
 
 }
 
-## Iaas 
+## Iaas
 
 resource "azurerm_subnet" "iaas_subnet" {
   address_prefixes = [var.iaas_subnet_cidr_blocks]
@@ -59,7 +59,7 @@ resource "azurerm_subnet" "application_gateway_subnet" {
   virtual_network_name = azurerm_virtual_network.virtual_network.name
 }
 
-## VH Additional Subnets
+## Additional Subnets
 
 resource "azurerm_subnet" "additional_subnets" {
   for_each = { for subnet in var.additional_subnets : subnet.name => subnet }
@@ -75,6 +75,19 @@ resource "azurerm_subnet" "additional_subnets" {
 
 resource "azurerm_route_table" "route_table" {
   name = format("%s-%s-route-table",
+    var.service_shortname,
+    var.environment
+  )
+
+  location            = var.network_location
+  resource_group_name = var.resource_group_name
+  tags                = var.tags
+}
+
+resource "azurerm_route_table" "appgw" {
+  count = var.application_gateway_routes == [] ? 0 : 1
+
+  name = format("%s-%s-appgw-route-table",
     var.service_shortname,
     var.environment
   )
@@ -103,6 +116,18 @@ resource "azurerm_route" "additional_route" {
   address_prefix         = each.value.address_prefix
   next_hop_type          = each.value.next_hop_type
   next_hop_in_ip_address = each.value.next_hop_type != "VirtualAppliance" ? null : each.value.next_hop_in_ip_address
+}
+
+resource "azurerm_route" "appgw" {
+  for_each = { for route in var.application_gateway_routes : route.name => route }
+
+  name                   = lower(each.value.name)
+  route_table_name       = azurerm_route_table.appgw[0].name
+  resource_group_name    = var.resource_group_name
+  address_prefix         = each.value.address_prefix
+  next_hop_type          = each.value.next_hop_type
+  next_hop_in_ip_address = each.value.next_hop_type != "VirtualAppliance" ? null : each.value.next_hop_in_ip_address
+
 }
 
 resource "azurerm_subnet_route_table_association" "aks_00" {
