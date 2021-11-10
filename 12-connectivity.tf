@@ -84,7 +84,8 @@ resource "azurerm_route_table" "route_table" {
 }
 
 resource "azurerm_route" "default_route" {
-count = contains(["ptlsbox", "ptl", "preview", "sbox", "ithc", "perftest", "aat"], var.environment) ? 0 : 1
+  count = contains(["ptlsbox", "ptl", "preview", "sbox", "ithc", "perftest", "aat"], var.environment) ? 1 : 0
+  
   name                   = var.route_name
   route_table_name       = azurerm_route_table.route_table.name
   resource_group_name    = var.resource_group_name
