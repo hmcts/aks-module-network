@@ -148,3 +148,34 @@ resource "azurerm_subnet_route_table_association" "appgw" {
   route_table_id = azurerm_route_table.appgw[0].id
   subnet_id      = azurerm_subnet.application_gateway_subnet.id
 }
+
+#redis route_table
+resource "azurerm_route_table" "redis" {
+  count = var.redis_subnet_routes == [] ? 0 : 1
+
+  name = format("%s-%s-redis-route-table",
+  var.service_shortname,
+  var.environment
+  )
+
+  location            = var.network_location
+  resource_group_name = var.resource_group_name
+}
+#redis routes
+resource "azurerm_route" "redis" {
+  for_each = { for route in var.redis_subnet_routes : route.name => route }
+
+  name                   = lower(each.value.name)
+  route_table_name       = azurerm_route_table.redis[0].name
+  resource_group_name    = var.resource_group_name
+  address_prefix         = each.value.address_prefix
+  next_hop_type          = each.value.next_hop_type
+  next_hop_in_ip_address = each.value.next_hop_type != "VirtualAppliance" ? null : each.value.next_hop_in_ip_address
+
+}
+#associate to redis subnet
+resource "azurerm_subnet_route_table_association" "redis" {
+  count = var.application_gateway_routes == [] ? 0 : 1
+  route_table_id = azurerm_route_table.redis[0].id
+  subnet_id      = azurerm_subnet.additional_subnets["redis"].id
+}

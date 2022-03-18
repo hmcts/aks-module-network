@@ -29,3 +29,4 @@ variable "service_shortname" {}
 # Tags
 variable "tags" {}
 
+variable "redis_subnet_routes"{}
