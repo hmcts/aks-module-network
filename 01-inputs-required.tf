@@ -28,4 +28,3 @@ variable "service_shortname" {}
 
 # Tags
 variable "tags" {}
-

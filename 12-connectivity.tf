@@ -148,3 +148,35 @@ resource "azurerm_subnet_route_table_association" "appgw" {
   route_table_id = azurerm_route_table.appgw[0].id
   subnet_id      = azurerm_subnet.application_gateway_subnet.id
 }
+
+#additional subnet route_table
+resource "azurerm_route_table" "rtable" {
+for_each = toset(local.additional_route_table)
+
+  name = format("%s-%s-${each.key}-route-table",
+  var.service_shortname,
+  var.environment
+  )
+
+  location            = var.network_location
+  resource_group_name = var.resource_group_name
+}
+#additional subnet routes
+resource "azurerm_route" "additional_subnet_routes" {
+  for_each = { for sub in local.additional_subnet_routes: sub.name => sub }
+
+  name                   = lower(each.value.name)
+  route_table_name       = azurerm_route_table.rtable[each.value.subnetname].name
+  resource_group_name    = var.resource_group_name
+  address_prefix         = each.value.address_prefix
+  next_hop_type          = each.value.next_hop_type
+  next_hop_in_ip_address = each.value.next_hop_type != "VirtualAppliance" ? null : each.value.next_hop_in_ip_address
+
+}
+#associate  route table  to additional subnet
+resource "azurerm_subnet_route_table_association" "redis" {
+  for_each = toset(local.additional_route_table)
+  route_table_id = azurerm_route_table.rtable[each.key].id
+  subnet_id      = azurerm_subnet.additional_subnets[each.key].id
+}
+
