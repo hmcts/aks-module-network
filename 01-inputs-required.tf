@@ -7,6 +7,7 @@ variable "aks_00_subnet_cidr_blocks" {}
 variable "aks_01_subnet_cidr_blocks" {}
 variable "iaas_subnet_cidr_blocks" {}
 variable "application_gateway_subnet_cidr_blocks" {}
+variable "postgresql_subnet_cidr_blocks" {}
 variable "application_gateway_routes" {
   default = []
 }
@@ -28,4 +29,3 @@ variable "service_shortname" {}
 
 # Tags
 variable "tags" {}
-
