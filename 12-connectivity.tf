@@ -33,7 +33,7 @@ resource "azurerm_subnet" "aks_01_subnet" {
 
 }
 
-## Iaas 
+## Iaas
 
 resource "azurerm_subnet" "iaas_subnet" {
   address_prefixes = [var.iaas_subnet_cidr_blocks]
@@ -57,6 +57,26 @@ resource "azurerm_subnet" "application_gateway_subnet" {
 
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.virtual_network.name
+}
+
+# Postgres
+
+resource "azurerm_subnet" "postgresql_subnet" {
+  address_prefixes = [var.postgresql_subnet_cidr_blocks]
+
+  name = "postgresql"
+
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.virtual_network.name
+  delegation {
+    name = "fs"
+    service_delegation {
+      name = "Microsoft.DBforPostgreSQL/flexibleServers"
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/join/action",
+      ]
+    }
+  }
 }
 
 ## VH Additional Subnets
@@ -112,12 +132,12 @@ resource "azurerm_subnet_route_table_association" "aks_01" {
   route_table_id = azurerm_route_table.route_table.id
   subnet_id      = azurerm_subnet.aks_01_subnet.id
 }
-  
+
 resource "azurerm_subnet_route_table_association" "iaas" {
   route_table_id = azurerm_route_table.route_table.id
   subnet_id      = azurerm_subnet.iaas_subnet.id
 }
-  
+
 resource "azurerm_route_table" "route_table_appgw" {
   name = format("%s-%s-appgw-route-table",
     var.service_shortname,
@@ -126,6 +146,11 @@ resource "azurerm_route_table" "route_table_appgw" {
 
   location            = var.network_location
   resource_group_name = var.resource_group_name
+}
+
+resource "azurerm_subnet_route_table_association" "postgresql" {
+  route_table_id = azurerm_route_table.route_table.id
+  subnet_id      = azurerm_subnet.postgresql_subnet.id
 }
 
 resource "azurerm_subnet_route_table_association" "application_gateway_subnet" {
