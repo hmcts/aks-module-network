@@ -77,6 +77,8 @@ resource "azurerm_subnet" "postgresql_subnet" {
       ]
     }
   }
+  
+  service_endpoints    = var.subnet_service_endpoints
 }
 
 ## Additional Subnets
