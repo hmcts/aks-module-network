@@ -77,6 +77,10 @@ resource "azurerm_subnet" "postgresql_subnet" {
       ]
     }
   }
+
+  service_endpoints = [
+    "Microsoft.Storage"
+  ]
 }
 
 ## Additional Subnets
