@@ -33,3 +33,14 @@ variable "additional_subnets" {
 
   default = []
 }
+
+variable "additional_routes_appgw" {
+  type = list(object({
+    name                   = string
+    address_prefix         = string
+    next_hop_type          = string
+    next_hop_in_ip_address = string
+  }))
+
+  default = []
+}
