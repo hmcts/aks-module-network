@@ -106,19 +106,6 @@ resource "azurerm_route_table" "route_table" {
   tags                = var.tags
 }
 
-resource "azurerm_route_table" "appgw" {
-  count = var.application_gateway_routes == [] ? 0 : 1
-
-  name = format("%s-%s-appgw-route-table",
-    var.service_shortname,
-    var.environment
-  )
-
-  location            = var.network_location
-  resource_group_name = var.resource_group_name
-  tags                = var.tags
-}
-
 resource "azurerm_route" "default_route" {
   name                   = var.route_name
   route_table_name       = azurerm_route_table.route_table.name
@@ -137,18 +124,6 @@ resource "azurerm_route" "additional_route" {
   address_prefix         = each.value.address_prefix
   next_hop_type          = each.value.next_hop_type
   next_hop_in_ip_address = each.value.next_hop_type != "VirtualAppliance" ? null : each.value.next_hop_in_ip_address
-}
-
-resource "azurerm_route" "appgw" {
-  for_each = { for route in var.application_gateway_routes : route.name => route }
-
-  name                   = lower(each.value.name)
-  route_table_name       = azurerm_route_table.appgw[0].name
-  resource_group_name    = var.resource_group_name
-  address_prefix         = each.value.address_prefix
-  next_hop_type          = each.value.next_hop_type
-  next_hop_in_ip_address = each.value.next_hop_type != "VirtualAppliance" ? null : each.value.next_hop_in_ip_address
-
 }
 
 resource "azurerm_subnet_route_table_association" "aks_00" {
@@ -194,7 +169,7 @@ resource "azurerm_subnet_route_table_association" "application_gateway_subnet" {
 }
 
 resource "azurerm_route" "additional_route_appgw" {
-  for_each = { for route in var.additional_routes_appgw : route.name => route }
+  for_each = { for route in var.application_gateway_routes : route.name => route }
 
   name                   = lower(each.value.name)
   route_table_name       = azurerm_route_table.route_table_appgw.name
@@ -202,5 +177,4 @@ resource "azurerm_route" "additional_route_appgw" {
   address_prefix         = each.value.address_prefix
   next_hop_type          = each.value.next_hop_type
   next_hop_in_ip_address = each.value.next_hop_type != "VirtualAppliance" ? null : each.value.next_hop_in_ip_address
-
 }
