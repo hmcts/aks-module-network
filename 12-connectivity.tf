@@ -77,8 +77,8 @@ resource "azurerm_subnet" "postgresql_subnet" {
       ]
     }
   }
-  
-  service_endpoints    = var.subnet_service_endpoints
+
+  service_endpoints = var.subnet_service_endpoints
 }
 
 ## Additional Subnets
@@ -180,6 +180,7 @@ resource "azurerm_route_table" "route_table_appgw" {
 
   location            = var.network_location
   resource_group_name = var.resource_group_name
+  tags                = var.tags
 }
 
 resource "azurerm_subnet_route_table_association" "postgresql" {
