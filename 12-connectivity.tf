@@ -142,8 +142,8 @@ resource "azurerm_subnet_route_table_association" "iaas" {
 }
 
 resource "azurerm_subnet_route_table_association" "appgw" {
-  count          = var.application_gateway_routes == [] ? 0 : 1
-  route_table_id = azurerm_route_table.appgw[0].id
+  count          = var.additional_routes_appgw == [] ? 0 : 1
+  route_table_id = azurerm_route_table.route_table_appgw.id
   subnet_id      = azurerm_subnet.application_gateway_subnet.id
 }
 
