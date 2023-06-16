@@ -178,3 +178,8 @@ resource "azurerm_route" "additional_route_appgw" {
   next_hop_type          = each.value.next_hop_type
   next_hop_in_ip_address = each.value.next_hop_type != "VirtualAppliance" ? null : each.value.next_hop_in_ip_address
 }
+
+moved {
+  from = azurerm_route_table.appgw[0]
+  to   = azurerm_route_table.route_table_appgw
+}
