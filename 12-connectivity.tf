@@ -184,6 +184,6 @@ moved {
 }
 
 moved {
-  from = azurerm_subnet_route_table_association.appgw
+  from = azurerm_subnet_route_table_association.appgw[0]
   to   = azurerm_subnet_route_table_association.application_gateway_subnet
 }
