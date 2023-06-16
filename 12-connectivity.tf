@@ -141,12 +141,6 @@ resource "azurerm_subnet_route_table_association" "iaas" {
   subnet_id      = azurerm_subnet.iaas_subnet.id
 }
 
-resource "azurerm_subnet_route_table_association" "appgw" {
-  count          = var.additional_routes_appgw == [] ? 0 : 1
-  route_table_id = azurerm_route_table.route_table_appgw.id
-  subnet_id      = azurerm_subnet.application_gateway_subnet.id
-}
-
 resource "azurerm_route_table" "route_table_appgw" {
   name = format("%s-%s-appgw-route-table",
     var.service_shortname,
@@ -187,4 +181,9 @@ moved {
 moved {
   from = azurerm_route.appgw
   to   = azurerm_route.additional_route_appgw
+}
+
+moved {
+  from = azurerm_subnet_route_table_association.appgw
+  to   = azurerm_subnet_route_table_association.application_gateway_subnet
 }
