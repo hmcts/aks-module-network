@@ -183,3 +183,8 @@ moved {
   from = azurerm_route_table.appgw[0]
   to   = azurerm_route_table.route_table_appgw
 }
+
+moved {
+  from = azurerm_route.appgw
+  to   = azurerm_route.additional_route_appgw
+}
