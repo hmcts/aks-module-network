@@ -8,9 +8,6 @@ variable "aks_01_subnet_cidr_blocks" {}
 variable "iaas_subnet_cidr_blocks" {}
 variable "application_gateway_subnet_cidr_blocks" {}
 variable "postgresql_subnet_cidr_blocks" {}
-variable "application_gateway_routes" {
-  default = []
-}
 variable "subnet_service_endpoints" {
   default = [
     "Microsoft.Storage",
