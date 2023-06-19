@@ -34,7 +34,7 @@ variable "additional_subnets" {
   default = []
 }
 
-variable "additional_routes_appgw" {
+variable "additional_routes_application_gateway" {
   type = list(object({
     name                   = string
     address_prefix         = string
