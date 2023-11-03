@@ -81,6 +81,28 @@ resource "azurerm_subnet" "postgresql_subnet" {
   service_endpoints = var.subnet_service_endpoints
 }
 
+# Postgres Expanded subnet
+
+resource "azurerm_subnet" "postgresql_expanded_subnet" {
+  address_prefixes = [var.postgresql_subnet_expanded_cidr_blocks]
+
+  name = "postgres-expanded"
+
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.virtual_network.name
+  delegation {
+    name = "fs"
+    service_delegation {
+      name = "Microsoft.DBforPostgreSQL/flexibleServers"
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/join/action",
+      ]
+    }
+  }
+
+  service_endpoints = var.subnet_service_endpoints
+}
+
 ## Additional Subnets
 
 resource "azurerm_subnet" "additional_subnets" {
@@ -155,6 +177,11 @@ resource "azurerm_route_table" "route_table_appgw" {
 resource "azurerm_subnet_route_table_association" "postgresql" {
   route_table_id = azurerm_route_table.route_table.id
   subnet_id      = azurerm_subnet.postgresql_subnet.id
+}
+
+resource "azurerm_subnet_route_table_association" "postgresql_expanded" {
+  route_table_id = azurerm_route_table.route_table.id
+  subnet_id      = azurerm_subnet.postgresql_expanded_subnet.id
 }
 
 resource "azurerm_subnet_route_table_association" "application_gateway_subnet" {
