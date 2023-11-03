@@ -179,7 +179,7 @@ resource "azurerm_subnet_route_table_association" "postgresql" {
   subnet_id      = azurerm_subnet.postgresql_subnet.id
 }
 
-resource "azurerm_subnet_route_table_association" "postgresql_extended" {
+resource "azurerm_subnet_route_table_association" "postgresql_expanded" {
   route_table_id = azurerm_route_table.route_table.id
   subnet_id      = azurerm_subnet.postgresql_expanded_subnet.id
 }
