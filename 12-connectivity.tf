@@ -84,7 +84,7 @@ resource "azurerm_subnet" "postgresql_subnet" {
 # Postgres Expanded subnet
 
 resource "azurerm_subnet" "postgresql_expanded_subnet" {
-  address_prefixes = [var.postgresql_expanded_subnet_cidr_blocks]
+  address_prefixes = [var.postgresql_subnet_expanded_cidr_blocks]
 
   name = "postgres-expanded"
 
