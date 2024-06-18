@@ -30,7 +30,6 @@ resource "azurerm_subnet" "aks_01_subnet" {
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.virtual_network.name
   service_endpoints    = var.subnet_service_endpoints
-
 }
 
 ## Iaas
@@ -135,6 +134,15 @@ resource "azurerm_route" "default_route" {
   address_prefix         = var.route_address_prefix
   next_hop_type          = var.route_next_hop_type
   next_hop_in_ip_address = var.route_next_hop_in_ip_address
+}
+
+# Required for Entra ID Authentication for PostgreSQL Flexible Server
+resource "azurerm_route" "aad_internet_route" {
+  name                = "aad-internet-route"
+  route_table_name    = azurerm_route_table.route_table.name
+  resource_group_name = var.resource_group_name
+  address_prefix      = "AzureActiveDirectory"
+  next_hop_type       = "Internet"
 }
 
 resource "azurerm_route" "additional_route" {
