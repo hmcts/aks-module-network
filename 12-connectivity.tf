@@ -136,6 +136,7 @@ resource "azurerm_route" "default_route" {
   next_hop_in_ip_address = var.route_next_hop_in_ip_address
 }
 
+# Required for Entra ID Authentication for PostgreSQL Flexible Server
 resource "azurerm_route" "aad_internet_route" {
   name                = "aad-internet-route"
   route_table_name    = azurerm_route_table.route_table.name
