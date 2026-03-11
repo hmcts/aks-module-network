@@ -35,6 +35,7 @@ variable "additional_subnets" {
       service_name = string,
       actions      = list(string)
     })))
+    default_outbound_access_enabled = optional(bool)
   }))
   default = []
 }
