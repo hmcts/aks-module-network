@@ -118,6 +118,7 @@ resource "azurerm_subnet" "additional_subnets" {
   virtual_network_name              = azurerm_virtual_network.virtual_network.name
   private_endpoint_network_policies = each.value.private_endpoint_network_policies
   service_endpoints                 = each.value.service_endpoints
+  default_outbound_access_enabled   = each.value.default_outbound_access_enabled
 
   dynamic "delegation" {
     for_each = each.value.delegations != null ? each.value.delegations : {}

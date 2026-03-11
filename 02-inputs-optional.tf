@@ -36,6 +36,7 @@ variable "additional_subnets" {
       actions      = list(string)
     })))
     private_endpoint_network_policies = optional(string, "Disabled")
+    default_outbound_access_enabled = optional(bool, true)
   }))
   default = []
 }
