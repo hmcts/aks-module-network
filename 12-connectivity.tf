@@ -126,6 +126,58 @@ resource "azurerm_subnet" "additional_subnets" {
   }
 }
 
+## Additional Subnet NSGs
+
+resource "azurerm_network_security_group" "additional_subnet_nsg" {
+  for_each = { for subnet in var.additional_subnets : subnet.name => subnet if length(coalesce(subnet.nsg_rules, [])) > 0 }
+
+  name                = format("%s-%s-nsg", each.key, var.environment)
+  location            = var.network_location
+  resource_group_name = var.resource_group_name
+  tags                = var.tags
+}
+
+resource "azurerm_network_security_rule" "additional_subnet_nsg_rules" {
+  for_each = {
+    for rule in flatten([
+      for subnet in var.additional_subnets : [
+        for rule in coalesce(subnet.nsg_rules, []) : {
+          key                        = "${subnet.name}-${rule.name}"
+          subnet_name                = subnet.name
+          name                       = rule.name
+          priority                   = rule.priority
+          direction                  = rule.direction
+          access                     = rule.access
+          protocol                   = rule.protocol
+          source_port_range          = rule.source_port_range
+          destination_port_range     = rule.destination_port_range
+          source_address_prefix      = rule.source_address_prefix
+          destination_address_prefix = rule.destination_address_prefix
+        }
+      ] if length(coalesce(subnet.nsg_rules, [])) > 0
+    ]) : rule.key => rule
+  }
+
+  name                        = each.value.name
+  priority                    = each.value.priority
+  direction                   = each.value.direction
+  access                      = each.value.access
+  protocol                    = each.value.protocol
+  source_port_range           = each.value.source_port_range
+  destination_port_range      = each.value.destination_port_range
+  source_address_prefix       = each.value.source_address_prefix
+  destination_address_prefix  = each.value.destination_address_prefix
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.additional_subnet_nsg[each.value.subnet_name].name
+}
+
+resource "azurerm_subnet_network_security_group_association" "additional_subnet_nsg" {
+  for_each = { for subnet in var.additional_subnets : subnet.name => subnet if length(coalesce(subnet.nsg_rules, [])) > 0 }
+
+  subnet_id                 = azurerm_subnet.additional_subnets[each.key].id
+  network_security_group_id = azurerm_network_security_group.additional_subnet_nsg[each.key].id
+}
+
 # Route Table
 
 resource "azurerm_route_table" "route_table" {
@@ -202,6 +254,13 @@ resource "azurerm_subnet_route_table_association" "postgresql" {
 resource "azurerm_subnet_route_table_association" "postgresql_expanded" {
   route_table_id = azurerm_route_table.route_table.id
   subnet_id      = azurerm_subnet.postgresql_expanded_subnet.id
+}
+
+resource "azurerm_subnet_route_table_association" "additional_subnets" {
+  for_each = { for subnet in var.additional_subnets : subnet.name => subnet if coalesce(subnet.associate_route_table, false) }
+
+  route_table_id = azurerm_route_table.route_table.id
+  subnet_id      = azurerm_subnet.additional_subnets[each.key].id
 }
 
 resource "azurerm_subnet_route_table_association" "application_gateway_subnet" {
