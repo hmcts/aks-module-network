@@ -28,14 +28,26 @@ variable "additional_routes" {
 variable "additional_subnets" {
   description = "Map of additional subnets to create, keyed by the subnet name."
   type = list(object({
-    name              = string
-    address_prefix    = string
-    service_endpoints = optional(list(string))
+    name                              = string
+    address_prefix                    = string
+    service_endpoints                 = optional(list(string))
+    private_endpoint_network_policies = optional(string, "Disabled")
+    associate_route_table             = optional(bool, false)
     delegations = optional(map(object({
       service_name = string,
       actions      = list(string)
     })))
-    private_endpoint_network_policies = optional(string, "Disabled")
+    nsg_rules = optional(list(object({
+      name                       = string
+      priority                   = number
+      direction                  = string
+      access                     = string
+      protocol                   = string
+      source_port_range          = string
+      destination_port_range     = string
+      source_address_prefix      = string
+      destination_address_prefix = string
+    })), [])
   }))
   default = []
 }
