@@ -38,18 +38,48 @@ variable "additional_subnets" {
       actions      = list(string)
     })))
     nsg_rules = optional(list(object({
-      name                       = string
-      priority                   = number
-      direction                  = string
-      access                     = string
-      protocol                   = string
-      source_port_range          = string
-      destination_port_range     = string
-      source_address_prefix      = string
-      destination_address_prefix = string
+      name                         = string
+      priority                     = number
+      direction                    = string
+      access                       = string
+      protocol                     = string
+      source_port_range            = optional(string)
+      source_port_ranges           = optional(list(string))
+      destination_port_range       = optional(string)
+      destination_port_ranges      = optional(list(string))
+      source_address_prefix        = optional(string)
+      source_address_prefixes      = optional(list(string))
+      destination_address_prefix   = optional(string)
+      destination_address_prefixes = optional(list(string))
     })), [])
   }))
   default = []
+
+  validation {
+    condition = alltrue(flatten([
+      for subnet in var.additional_subnets : [
+        for rule in coalesce(subnet.nsg_rules, []) :
+        (rule.source_port_range == null || rule.source_port_ranges == null) &&
+        (rule.destination_port_range == null || rule.destination_port_ranges == null) &&
+        (rule.source_address_prefix == null || rule.source_address_prefixes == null) &&
+        (rule.destination_address_prefix == null || rule.destination_address_prefixes == null)
+      ]
+    ]))
+    error_message = "For each nsg_rule, set only the singular (e.g. source_port_range) OR the plural (e.g. source_port_ranges) form, not both. This applies to source_port_range/ranges, destination_port_range/ranges, source_address_prefix/prefixes, and destination_address_prefix/prefixes."
+  }
+
+  validation {
+    condition = alltrue(flatten([
+      for subnet in var.additional_subnets : [
+        for rule in coalesce(subnet.nsg_rules, []) :
+        (rule.source_port_range != null || rule.source_port_ranges != null) &&
+        (rule.destination_port_range != null || rule.destination_port_ranges != null) &&
+        (rule.source_address_prefix != null || rule.source_address_prefixes != null) &&
+        (rule.destination_address_prefix != null || rule.destination_address_prefixes != null)
+      ]
+    ]))
+    error_message = "For each nsg_rule, you must set one of source_port_range/ranges, one of destination_port_range/ranges, one of source_address_prefix/prefixes, and one of destination_address_prefix/prefixes."
+  }
 }
 
 variable "additional_routes_application_gateway" {
