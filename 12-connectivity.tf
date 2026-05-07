@@ -147,33 +147,41 @@ resource "azurerm_network_security_rule" "additional_subnet_nsg_rules" {
     for rule in flatten([
       for subnet in var.additional_subnets : [
         for rule in coalesce(subnet.nsg_rules, []) : {
-          key                        = "${subnet.name}-${rule.name}"
-          subnet_name                = subnet.name
-          name                       = rule.name
-          priority                   = rule.priority
-          direction                  = rule.direction
-          access                     = rule.access
-          protocol                   = rule.protocol
-          source_port_range          = rule.source_port_range
-          destination_port_range     = rule.destination_port_range
-          source_address_prefix      = rule.source_address_prefix
-          destination_address_prefix = rule.destination_address_prefix
+          key                          = "${subnet.name}-${rule.name}"
+          subnet_name                  = subnet.name
+          name                         = rule.name
+          priority                     = rule.priority
+          direction                    = rule.direction
+          access                       = rule.access
+          protocol                     = rule.protocol
+          source_port_range            = rule.source_port_range
+          source_port_ranges           = rule.source_port_ranges
+          destination_port_range       = rule.destination_port_range
+          destination_port_ranges      = rule.destination_port_ranges
+          source_address_prefix        = rule.source_address_prefix
+          source_address_prefixes      = rule.source_address_prefixes
+          destination_address_prefix   = rule.destination_address_prefix
+          destination_address_prefixes = rule.destination_address_prefixes
         }
       ] if length(coalesce(subnet.nsg_rules, [])) > 0
     ]) : rule.key => rule
   }
 
-  name                        = each.value.name
-  priority                    = each.value.priority
-  direction                   = each.value.direction
-  access                      = each.value.access
-  protocol                    = each.value.protocol
-  source_port_range           = each.value.source_port_range
-  destination_port_range      = each.value.destination_port_range
-  source_address_prefix       = each.value.source_address_prefix
-  destination_address_prefix  = each.value.destination_address_prefix
-  resource_group_name         = var.resource_group_name
-  network_security_group_name = azurerm_network_security_group.additional_subnet_nsg[each.value.subnet_name].name
+  name                         = each.value.name
+  priority                     = each.value.priority
+  direction                    = each.value.direction
+  access                       = each.value.access
+  protocol                     = each.value.protocol
+  source_port_range            = each.value.source_port_range
+  source_port_ranges           = each.value.source_port_ranges
+  destination_port_range       = each.value.destination_port_range
+  destination_port_ranges      = each.value.destination_port_ranges
+  source_address_prefix        = each.value.source_address_prefix
+  source_address_prefixes      = each.value.source_address_prefixes
+  destination_address_prefix   = each.value.destination_address_prefix
+  destination_address_prefixes = each.value.destination_address_prefixes
+  resource_group_name          = var.resource_group_name
+  network_security_group_name  = azurerm_network_security_group.additional_subnet_nsg[each.value.subnet_name].name
 }
 
 resource "azurerm_subnet_network_security_group_association" "additional_subnet_nsg" {
